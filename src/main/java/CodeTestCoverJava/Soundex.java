@@ -12,12 +12,12 @@ public class Soundex {
 	        mapCharacterCode(charGroups, codes);
 	    }
     
-	private static void mapCharacterCode(String[] charGroups, char[] codes) {
-			for (int charGroup = 0; charGroup < charGroups.length; charGroup++) {
-	            for (char c : charGroups[charGroup].toCharArray()) {
-	                characterCodeMap.put(c, codes[charGroup]);
+    private static void mapCharacterCode(String[] charGroups, char[] codes) {
+	for (int charGroup = 0; charGroup < charGroups.length; charGroup++) {
+	     for (char c : charGroups[charGroup].toCharArray()) {
+	             characterCodeMap.put(c, codes[charGroup]);
+	               }
 	            }
-	        }
 		}
 
     public static String generateSoundex(String inputString) {
@@ -53,10 +53,10 @@ public class Soundex {
         appendValidSoundexCode(soundex, code, previousCode);
     }
 	
- private static boolean isSpecialCharacter(char c) {
-    return "AEIOUYHW".indexOf(c) >= 0;
-}
-
+    private static boolean isSpecialCharacter(char c) {
+       return "AEIOUYHW".contains(String.valueOf(c));
+    }
+	
     private static void appendValidSoundexCode(StringBuilder soundex, char code, char previousCode) {
         if (isCodeValid(code, previousCode) && soundex.length() < 4) {
             soundex.append(code);
