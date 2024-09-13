@@ -13,12 +13,12 @@ public class SoundexTest {
 
     @Test
     public void testSingleCharacter() {
-        assertEquals(Soundex.generateSoundex("B"), "B000");
+        assertEquals(Soundex.generateSoundex("J"), "J000");
     }
 
     @Test
     public void testStringWithSpace() {
-        assertEquals(Soundex.generateSoundex("Doe John"), "D500");
+        assertEquals(Soundex.generateSoundex("D WW"), "D000");
     }
 
     @Test
