@@ -2,7 +2,6 @@ package CodeTestCoverJava;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
 
 public class Soundex {
 
@@ -10,7 +9,6 @@ public class Soundex {
 	    static {
 	        String[] charGroups = { "BFPV", "CGJKQSXZ", "DT", "L", "MN", "R" };
 	        char[] codes = { '1', '2', '3', '4', '5', '6' };
-
 	        mapCharacterCode(charGroups, codes);
 	    }
     
@@ -33,7 +31,7 @@ public class Soundex {
     }
 
     private static boolean isInputInvalid(String inputString) {
-        return StringUtils.isBlank(inputString);
+        return inputString == null || inputString.isEmpty();
     }
 
     private static void processSoundexCharacters(String name, StringBuilder soundex) {
