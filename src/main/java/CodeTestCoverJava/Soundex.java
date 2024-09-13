@@ -2,35 +2,38 @@ package CodeTestCoverJava;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 
 public class Soundex {
 
     private static final Map<Character, Character> characterCodeMap = new HashMap<>();
-    static {
-        String[] groups = { "BFPV", "CGJKQSXZ", "DT", "L", "MN", "R" };
-        char[] codes = { '1', '2', '3', '4', '5', '6' };
+	    static {
+	        String[] charGroups = { "BFPV", "CGJKQSXZ", "DT", "L", "MN", "R" };
+	        char[] codes = { '1', '2', '3', '4', '5', '6' };
 
-        for (int i = 0; i < groups.length; i++) {
-            for (char c : groups[i].toCharArray()) {
-                characterCodeMap.put(c, codes[i]);
-            }
-        }
-    }
+	        mapCharacterCode(charGroups, codes);
+	    }
+    
+	private static void mapCharacterCode(String[] charGroups, char[] codes) {
+			for (int charGroup = 0; charGroup < charGroups.length; charGroup++) {
+	            for (char c : charGroups[charGroup].toCharArray()) {
+	                characterCodeMap.put(c, codes[charGroup]);
+	            }
+	        }
+		}
 
-    public static String generateSoundex(String name) {
-        if (isInputInvalid(name)) {
+    public static String generateSoundex(String inputString) {
+        if (isInputInvalid(inputString)) {
             return "";
         }
-
         StringBuilder soundex = new StringBuilder();
-        soundex.append(Character.toUpperCase(name.charAt(0)));
-        processSoundexCharacters(name, soundex);
-
+        soundex.append(Character.toUpperCase(inputString.charAt(0)));
+        processSoundexCharacters(inputString, soundex);
         return finalizeSoundexCode(soundex);
     }
 
-    private static boolean isInputInvalid(String name) {
-        return name == null || name.isEmpty();
+    private static boolean isInputInvalid(String inputString) {
+        return StringUtils.isNotBlank(inputString);
     }
 
     private static void processSoundexCharacters(String name, StringBuilder soundex) {
