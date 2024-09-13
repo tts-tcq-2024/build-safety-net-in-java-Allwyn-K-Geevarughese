@@ -54,15 +54,11 @@ public class Soundex {
     }
 
     private static boolean shouldCharacterBeSkipped(char currentChar, char previousChar) {
-        return isSkippedCharacter(currentChar) && !isVowelCharacterOrCharY(previousChar);
+        return !isVowelOrConsonantHWY(previousChar);
     }
 
-    private static boolean isSkippedCharacter(char currentChar) {
-        return currentChar == 'H' || currentChar == 'W';
-    }
-
-    private static boolean isVowelCharacterOrCharY(char c) {
-        return "AEIOUY".indexOf(c) >= 0;
+    private static boolean isVowelOrConsonantHWY(char c) {
+        return "AEIOUHWY".contains(c);
     }
 
     private static void appendValidSoundexCode(StringBuilder soundex, char code, char previousCode) {
