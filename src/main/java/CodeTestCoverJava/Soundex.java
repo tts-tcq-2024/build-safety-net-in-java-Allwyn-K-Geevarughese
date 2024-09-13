@@ -3,7 +3,7 @@ package CodeTestCoverJava;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Soundexx {
+public class Soundex {
 
     private static final Map<Character, Character> characterCodeMap = new HashMap<>();
 
