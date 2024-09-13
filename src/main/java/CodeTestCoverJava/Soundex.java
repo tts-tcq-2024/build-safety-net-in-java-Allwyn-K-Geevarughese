@@ -34,12 +34,11 @@ public class Soundex {
         return inputString == null || inputString.isEmpty();
     }
 
-    private static void processSoundexCharacters(String name, StringBuilder soundex) {
+    private static void processSoundexCharacters(String inputString, StringBuilder soundex) {
         char previousCode = '0'; 
-        char previousChar = Character.toUpperCase(name.charAt(0)); 
-
-        for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
-            char currentChar = Character.toUpperCase(name.charAt(i));
+        char previousChar = Character.toUpperCase(inputString.charAt(0)); 
+        for (int index = 1; index < inputString.length() && soundex.length() < 4; index++) {
+            char currentChar = Character.toUpperCase(inputString.charAt(index));
             processCharacterForSoundex(soundex, currentChar, previousChar, previousCode);
             previousCode = fetchSoundexCode(currentChar);
             previousChar = currentChar; 
@@ -50,20 +49,19 @@ public class Soundex {
         if (shouldCharacterBeSkipped(currentChar, previousChar)) {
             return;
         }
-
         char code = fetchSoundexCode(currentChar);
         appendValidSoundexCode(soundex, code, previousCode);
     }
 
     private static boolean shouldCharacterBeSkipped(char currentChar, char previousChar) {
-        return isSkippedCharacter(currentChar) && !isVowelCharacter(previousChar);
+        return isSkippedCharacter(currentChar) && !isVowelCharacterOrCharY(previousChar);
     }
 
     private static boolean isSkippedCharacter(char currentChar) {
         return currentChar == 'H' || currentChar == 'W';
     }
 
-    private static boolean isVowelCharacter(char c) {
+    private static boolean isVowelCharacterOrCharY(char c) {
         return "AEIOUY".indexOf(c) >= 0;
     }
 
