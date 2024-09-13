@@ -18,7 +18,7 @@ public class SoundexTest {
 
     @Test
     public void testSingleCharacter() {
-        assertEquals("A000", Soundex.generateSoundex("A"));
+        assertEquals(Soundex.generateSoundex("A"), "A000");
     }
 
     @Test
