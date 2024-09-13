@@ -1,40 +1,37 @@
 package CodeTestCoverJava;
 
 import static org.junit.Assert.assertEquals;
-import org.mockito.Mockito;
-
 import org.junit.Test;
 
 public class SoundexTest {
-    Soundex soundexMock = Mockito.mock(Soundex.class);
 
     @Test
     public void testEmptyString() {
-        assertEquals(Soundex.generateSoundex(""), "");
+        assertEquals(Soundex.computeSoundexCode(""), "");
     }
 
     @Test
     public void testSingleCharacter() {
-        assertEquals(Soundex.generateSoundex("A"), "A000");
+        assertEquals(Soundex.computeSoundexCode("B"), "B000");
     }
 
     @Test
-    public void testStringWithEmptySpace() {
-        assertEquals(Soundex.generateSoundex("Van Gogh"), "V522");
+    public void testStringWithSpace() {
+        assertEquals(Soundex.computeSoundexCode("Doe John"), "D500");
     }
 
     @Test
-    public void testStringWithVowel() {
-        assertEquals(Soundex.generateSoundex("AEIOU"), "A000");
+    public void testStringWithVowelsOnly() {
+        assertEquals(Soundex.computeSoundexCode("AEIOU"), "A000");
     }
 
     @Test
-    public void testStringSoundJ() {
-        assertEquals(Soundex.generateSoundex("Jackson"), "J250");
+    public void testStringForSoundJ() {
+        assertEquals(Soundex.computeSoundexCode("Jenkins"), "J525");
     }
 
     @Test
-    public void testStringSoundH() {
-        assertEquals(Soundex.generateSoundex("Hilbert"), "H416");
+    public void testStringForSoundH() {
+        assertEquals(Soundex.computeSoundexCode("Hamilton"), "H543");
     }
 }
