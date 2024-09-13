@@ -33,7 +33,7 @@ public class Soundex {
     }
 
     private static boolean isInputInvalid(String inputString) {
-        return StringUtils.isNotBlank(inputString);
+        return StringUtils.isBlank(inputString);
     }
 
     private static void processSoundexCharacters(String name, StringBuilder soundex) {
