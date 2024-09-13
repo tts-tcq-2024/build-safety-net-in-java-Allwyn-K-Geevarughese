@@ -6,7 +6,6 @@ import java.util.Map;
 public class Soundex {
 
     private static final Map<Character, Character> characterCodeMap = new HashMap<>();
-
     static {
         String[] groups = { "BFPV", "CGJKQSXZ", "DT", "L", "MN", "R" };
         char[] codes = { '1', '2', '3', '4', '5', '6' };
