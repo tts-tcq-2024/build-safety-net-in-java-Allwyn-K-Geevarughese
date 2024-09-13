@@ -46,19 +46,15 @@ public class Soundex {
     }
 
     private static void processCharacterForSoundex(StringBuilder soundex, char currentChar, char previousChar, char previousCode) {
-        if (shouldCharacterBeSkipped(currentChar, previousChar)) {
+        if (isVowelOrConsonantHWY(currentChar, previousChar)) {
             return;
         }
         char code = fetchSoundexCode(currentChar);
         appendValidSoundexCode(soundex, code, previousCode);
     }
-
-    private static boolean shouldCharacterBeSkipped(char currentChar, char previousChar) {
-        return !isVowelOrConsonantHWY(previousChar);
-    }
-
-    private static boolean isVowelOrConsonantHWY(char c) {
-        return "AEIOUHWY".contains(c);
+	
+    private static boolean isVowelOrConsonantHWY(char chr) {
+        return "AEIOUHWY".contains(String.valueOf(chr))
     }
 
     private static void appendValidSoundexCode(StringBuilder soundex, char code, char previousCode) {
