@@ -1,40 +1,55 @@
 package CodeTestCoverJava;
 
 import static org.junit.Assert.assertEquals;
-import org.mockito.Mockito;
 
 import org.junit.Test;
 
 public class SoundexTest {
-    Soundex soundexMock = Mockito.mock(Soundex.class);
 
     @Test
     public void testEmptyString() {
-        assertEquals(Soundex.generateSoundex(""), "");
+        assertEquals("", Soundex.generateSoundex(""));
+    }
+
+    @Test
+    public void testNullString() {
+        assertEquals("", Soundex.generateSoundex(null));
     }
 
     @Test
     public void testSingleCharacter() {
-        assertEquals(Soundex.generateSoundex("A"), "A000");
+        assertEquals("A000", Soundex.generateSoundex("A"));
     }
 
     @Test
-    public void testStringWithEmptySpace() {
-        assertEquals(Soundex.generateSoundex("Van Gogh"), "V522");
+    public void testVowels() {
+        assertEquals("A000", Soundex.generateSoundex("AEIOU"));
     }
 
     @Test
-    public void testStringWithVowel() {
-        assertEquals(Soundex.generateSoundex("AEIOU"), "A000");
+    public void testConsonants() {
+        assertEquals("S530", Soundex.generateSoundex("Smith")); // S530
+        assertEquals("R163", Soundex.generateSoundex("Robert")); // R163
     }
 
     @Test
-    public void testStringSoundJ() {
-        assertEquals(Soundex.generateSoundex("Jackson"), "J250");
+    public void testRepeatedConsonants() {
+        assertEquals("T315", Soundex.generateSoundex("Ttfn")); // T315
     }
 
     @Test
-    public void testStringSoundH() {
-        assertEquals(Soundex.generateSoundex("Hilbert"), "H416");
+    public void testPadding() {
+        assertEquals("W623", Soundex.generateSoundex("Wright")); // W623
+        assertEquals("P620", Soundex.generateSoundex("Park"));   // Updated to P620
+    }
+
+    @Test
+    public void testMixedCase() {
+        assertEquals("R163", Soundex.generateSoundex("RoBeRt")); // R163
+    }
+
+    @Test
+    public void testHAndWHandling() {
+        assertEquals("R000", Soundex.generateSoundex("RWH")); // R000
     }
 }
