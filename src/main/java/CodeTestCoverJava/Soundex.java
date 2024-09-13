@@ -1,81 +1,90 @@
 package CodeTestCoverJava;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Soundex {
-    static StringBuilder soundex = new StringBuilder();
+
+    private static final Map<Character, Character> characterCodeMap = new HashMap<>();
+
+    static {
+        String[] groups = { "BFPV", "CGJKQSXZ", "DT", "L", "MN", "R" };
+        char[] codes = { '1', '2', '3', '4', '5', '6' };
+
+        for (int i = 0; i < groups.length; i++) {
+            for (char c : groups[i].toCharArray()) {
+                characterCodeMap.put(c, codes[i]);
+            }
+        }
+    }
 
     public static String generateSoundex(String name) {
-        if (name == null || name.isEmpty()) {
+        if (isInputInvalid(name)) {
             return "";
         }
 
         StringBuilder soundex = new StringBuilder();
         soundex.append(Character.toUpperCase(name.charAt(0)));
-        char prevCode = getSoundexCode(name.charAt(0));
-        checkLength(soundex, name);
-        return appendZeroEnd(soundex).toString();
+        processSoundexCharacters(name, soundex);
+
+        return finalizeSoundexCode(soundex);
     }
 
-    private static StringBuilder appendZeroEnd(StringBuilder soundex) {
+    private static boolean isInputInvalid(String name) {
+        return name == null || name.isEmpty();
+    }
+
+    private static void processSoundexCharacters(String name, StringBuilder soundex) {
+        char previousCode = '0'; 
+        char previousChar = Character.toUpperCase(name.charAt(0)); 
+
+        for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
+            char currentChar = Character.toUpperCase(name.charAt(i));
+            processCharacterForSoundex(soundex, currentChar, previousChar, previousCode);
+            previousCode = fetchSoundexCode(currentChar);
+            previousChar = currentChar; 
+        }
+    }
+
+    private static void processCharacterForSoundex(StringBuilder soundex, char currentChar, char previousChar, char previousCode) {
+        if (shouldCharacterBeSkipped(currentChar, previousChar)) {
+            return;
+        }
+
+        char code = fetchSoundexCode(currentChar);
+        appendValidSoundexCode(soundex, code, previousCode);
+    }
+
+    private static boolean shouldCharacterBeSkipped(char currentChar, char previousChar) {
+        return isSkippedCharacter(currentChar) && !isVowelCharacter(previousChar);
+    }
+
+    private static boolean isSkippedCharacter(char currentChar) {
+        return currentChar == 'H' || currentChar == 'W';
+    }
+
+    private static boolean isVowelCharacter(char c) {
+        return "AEIOUY".indexOf(c) >= 0;
+    }
+
+    private static void appendValidSoundexCode(StringBuilder soundex, char code, char previousCode) {
+        if (isCodeValid(code, previousCode) && soundex.length() < 4) {
+            soundex.append(code);
+        }
+    }
+
+    private static boolean isCodeValid(char code, char previousCode) {
+        return code != '0' && code != previousCode;
+    }
+
+    private static char fetchSoundexCode(char c) {
+        return characterCodeMap.getOrDefault(c, '0');
+    }
+
+    private static String finalizeSoundexCode(StringBuilder soundex) {
         while (soundex.length() < 4) {
             soundex.append('0');
         }
-        return soundex;
-    }
-
-    private static void checkLength(StringBuilder soundex, String name) {
-        for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
-            char curChar = name.charAt(i);
-            char preChar = name.charAt(i - 1);
-
-            char code = getSoundexCode(curChar);
-            char prevCode = getSoundexCode(preChar);
-
-            appendCode(code, prevCode, soundex);
-        }
-    }
-
-    private static void appendCode(char currentCode, char prevCode, StringBuilder soundex) {
-        if (currentCode != '0' && currentCode != prevCode) {
-            soundex.append(currentCode);
-        }
-    }
-
-    private static final char[] MAP = {
-        /** Keeping the data primitive 
-            A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z */
-        '0',
-        '1',
-        '2',
-        '3',
-        '0',
-        '1',
-        '2',
-        '0',
-        '0',
-        '2',
-        '2',
-        '4',
-        '5',
-        '5',
-        '0',
-        '1',
-        '2',
-        '6',
-        '2',
-        '3',
-        '0',
-        '1',
-        '0',
-        '2',
-        '0',
-        '2'
-    };
-
-    private static char getSoundexCode(char c) {
-        c = Character.toUpperCase(c);
-        if (c >= 'A' && c <= 'Z') {
-            return MAP[c - 'A'];
-        }
-        return '0';
+        return soundex.toString();
     }
 }
