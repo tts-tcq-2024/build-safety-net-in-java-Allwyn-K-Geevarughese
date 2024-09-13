@@ -52,4 +52,35 @@ public class SoundexTest {
     public void testHAndWHandling() {
         assertEquals("R000", Soundex.generateSoundex("RWH")); // R000
     }
+  @Test
+    public void testEmptyString() {
+        assertEquals(Soundex.computeSoundexCode(""), "");
+    }
+
+    @Test
+    public void testSingleCharacter() {
+        assertEquals(Soundex.computeSoundexCode("B"), "B000");
+    }
+
+    @Test
+    public void testStringWithSpace() {
+        assertEquals(Soundex.computeSoundexCode("Doe John"), "D500");
+    }
+
+    @Test
+    public void testStringWithVowelsOnly() {
+        assertEquals(Soundex.computeSoundexCode("AEIOU"), "A000");
+    }
+
+    @Test
+    public void testStringForSoundJ() {
+        assertEquals(Soundex.computeSoundexCode("Jenkins"), "J525");
+    }
+
+    @Test
+    public void testStringForSoundH() {
+        assertEquals(Soundex.computeSoundexCode("Hamilton"), "H543");
+    }
+
+    
 }
