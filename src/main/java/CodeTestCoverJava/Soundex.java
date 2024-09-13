@@ -46,16 +46,16 @@ public class Soundex {
     }
 
     private static void processCharacterForSoundex(StringBuilder soundex, char currentChar, char previousChar, char previousCode) {
-        if (isVowelOrConsonantHWY(currentChar, previousChar)) {
+        if (isSpecialCharacter(currentChar) && isSpecialCharacter(previousChar)) {
             return;
         }
         char code = fetchSoundexCode(currentChar);
         appendValidSoundexCode(soundex, code, previousCode);
     }
 	
-    private static boolean isVowelOrConsonantHWY(char chr) {
-        return "AEIOUHWY".contains(String.valueOf(chr))
-    }
+ private static boolean isSpecialCharacter(char c) {
+    return "AEIOUYHW".indexOf(c) >= 0;
+}
 
     private static void appendValidSoundexCode(StringBuilder soundex, char code, char previousCode) {
         if (isCodeValid(code, previousCode) && soundex.length() < 4) {
