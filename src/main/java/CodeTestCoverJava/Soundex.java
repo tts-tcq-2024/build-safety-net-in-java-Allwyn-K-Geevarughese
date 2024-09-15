@@ -1,48 +1,80 @@
 package CodeTestCoverJava;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Soundex {
 
-    public static String generateSoundex(String name) {
-        if (name == null || name.isEmpty()) {
+    private static final Map<Character, Character> characterCodeMap = new HashMap<>();
+	    static {
+	        String[] charGroups = { "BFPV", "CGJKQSXZ", "DT", "L", "MN", "R" };
+	        char[] codes = { '1', '2', '3', '4', '5', '6' };
+	        mapCharacterCode(charGroups, codes);
+	    }
+    
+    private static void mapCharacterCode(String[] charGroups, char[] codes) {
+	for (int charGroup = 0; charGroup < charGroups.length; charGroup++) {
+	     for (char c : charGroups[charGroup].toCharArray()) {
+	             characterCodeMap.put(c, codes[charGroup]);
+	               }
+	            }
+		}
+
+    public static String generateSoundex(String inputString) {
+        if (isInputInvalid(inputString)) {
             return "";
         }
-
         StringBuilder soundex = new StringBuilder();
-        soundex.append(Character.toUpperCase(name.charAt(0)));
-        char prevCode = getSoundexCode(name.charAt(0));
+        soundex.append(Character.toUpperCase(inputString.charAt(0)));
+        processSoundexCharacters(inputString, soundex);
+        return finalizeSoundexCode(soundex);
+    }
 
-        for (int i = 1; i < name.length() && soundex.length() < 4; i++) {
-            char code = getSoundexCode(name.charAt(i));
-            if (code != '0' && code != prevCode) {
-                soundex.append(code);
-                prevCode = code;
-            }
+    private static boolean isInputInvalid(String inputString) {
+        return inputString == null || inputString.isEmpty();
+    }
+
+    private static void processSoundexCharacters(String inputString, StringBuilder soundex) {
+        char previousCode = '0'; 
+        char previousChar = Character.toUpperCase(inputString.charAt(0)); 
+        for (int index = 1; index < inputString.length() && soundex.length() < 4; index++) {
+            char currentChar = Character.toUpperCase(inputString.charAt(index));
+            processCharacterForSoundex(soundex, currentChar, previousChar, previousCode);
+            previousCode = fetchSoundexCode(currentChar);
+            previousChar = currentChar; 
         }
+    }
 
+    private static void processCharacterForSoundex(StringBuilder soundex, char currentChar, char previousChar, char previousCode) {
+        if (isSpecialCharacter(currentChar) && isSpecialCharacter(previousChar)) {
+            return;
+        }
+        char code = fetchSoundexCode(currentChar);
+        appendValidSoundexCode(soundex, code, previousCode);
+    }
+	
+    private static boolean isSpecialCharacter(char c) {
+       return "AEIOUYHW".contains(String.valueOf(c));
+    }
+	
+    private static void appendValidSoundexCode(StringBuilder soundex, char code, char previousCode) {
+        if (isCodeValid(code, previousCode) && soundex.length() < 4) {
+            soundex.append(code);
+        }
+    }
+
+    private static boolean isCodeValid(char code, char previousCode) {
+        return code != '0' && code != previousCode;
+    }
+
+    private static char fetchSoundexCode(char c) {
+        return characterCodeMap.getOrDefault(c, '0');
+    }
+
+    private static String finalizeSoundexCode(StringBuilder soundex) {
         while (soundex.length() < 4) {
             soundex.append('0');
         }
-
         return soundex.toString();
-    }
-
-    private static char getSoundexCode(char c) {
-        c = Character.toUpperCase(c);
-        switch (c) {
-            case 'B': case 'F': case 'P': case 'V':
-                return '1';
-            case 'C': case 'G': case 'J': case 'K': case 'Q': case 'S': case 'X': case 'Z':
-                return '2';
-            case 'D': case 'T':
-                return '3';
-            case 'L':
-                return '4';
-            case 'M': case 'N':
-                return '5';
-            case 'R':
-                return '6';
-            default:
-                return '0'; // For A, E, I, O, U, H, W, Y
-        }
     }
 }
